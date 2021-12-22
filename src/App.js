@@ -1,25 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import './App.css'; 
+import Router from "./Config/router";
+import {useState,useEffect} from 'react'
+import {auth,logOut} from './Config/firebase'
+function App() { 
+const [user,setUser] = useState()
+const [loading,setLoading] = useState(true)
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
-
-export default App;
+useEffect(()=>{
+  auth.onAuthStateChanged(function (user) {
+    setUser(user)
+    setLoading(false)
+  })
+},[])
+return( 
+<div className="App">
+  {loading?<p>Loading...</p>: <Router user={user}/>}
+</div> 
+)}; 
+export default App; 
